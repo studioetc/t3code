@@ -28,7 +28,7 @@ const port = srv.address().port;
 const browser = await chromium.launch({ headless: true });
 const result = { chromium: browser.version() };
 for (const side of ["base", "head"]) {
-  const ctx = await browser.newContext({ viewport: { width: 900, height: 720 }, recordVideo: { dir: `${dir}/out3/${side}-video`, size: { width: 900, height: 720 } } });
+  const ctx = await browser.newContext({ viewport: { width: 900, height: 720 }, recordVideo: { dir: `${dir}/out4/${side}-video`, size: { width: 900, height: 720 } } });
   const p = await ctx.newPage();
   await p.goto(`http://127.0.0.1:${port}/host?src=${encodeURIComponent(`http://localhost:${port}/${side}#t3-contain-scroll`)}`);
   await p.waitForFunction(() => document.getElementById("f").getBoundingClientRect().height > 10000);
@@ -36,7 +36,7 @@ for (const side of ["base", "head"]) {
   await p.mouse.move(450, 400);
   const wheel = [];
   for (let i = 0; i < 40; i++) { await p.mouse.wheel(0, 200); await p.waitForTimeout(120); wheel.push(await p.evaluate(() => Math.round(document.getElementById("sc").scrollTop))); }
-  await p.screenshot({ path: `${dir}/out3/${side}-after-wheel.png` });
+  await p.screenshot({ path: `${dir}/out4/${side}-after-wheel.png` });
   await p.evaluate(() => { const s = document.getElementById("sc"); s.tabIndex = 0; s.focus(); });
   const keys = [];
   for (let i = 0; i < 6; i++) { await p.keyboard.press("PageDown"); await p.waitForTimeout(250); keys.push(await p.evaluate(() => Math.round(document.getElementById("sc").scrollTop))); }
@@ -44,5 +44,5 @@ for (const side of ["base", "head"]) {
   await ctx.close();
 }
 await browser.close(); srv.close();
-fs.writeFileSync(`${dir}/out3/result.json`, JSON.stringify(result, null, 1));
+fs.writeFileSync(`${dir}/out4/result.json`, JSON.stringify(result, null, 1));
 console.log(JSON.stringify(result));
