@@ -1,0 +1,17 @@
+<!doctype html><html><head><style>
+body{margin:0;font:16px/1.5 system-ui}
+nav{display:flex;gap:8px;overflow-x:auto;padding:8px;border-bottom:1px solid #8884}
+nav a{padding:4px 10px;border-radius:6px;text-decoration:none;color:inherit}
+nav a.active{background:#8883}
+section{min-height:1600px;padding:16px;border-bottom:1px solid #8884}
+</style></head><body>
+<nav id="index"></nav>
+<main id="main"></main>
+<script>
+const index=document.getElementById("index"),main=document.getElementById("main");
+for(let i=1;i<=10;i++){index.insertAdjacentHTML("beforeend",`<a href="#q${i}" data-q="q${i}">Q${i}</a>`);main.insertAdjacentHTML("beforeend",`<section id="q${i}"><h2>Question ${i}</h2><p>A tall card, like a long report section.</p></section>`);}
+// The common "highlight the current section in a sticky index" pattern.
+function setActive(id){index.querySelectorAll("a").forEach(a=>{const on=a.dataset.q===id;a.classList.toggle("active",on);if(on)a.scrollIntoView({block:"nearest",inline:"nearest"});});}
+const io=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting)setActive(e.target.id);},{rootMargin:"-25% 0px -65% 0px"});
+document.querySelectorAll("section").forEach(s=>io.observe(s));
+</script></body></html>
